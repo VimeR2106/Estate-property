@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+                
+        {
+            "name": "16.0 Training",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/roman/Odoo/16.0/src/odoo/odoo-bin",
+            "args": [
+                "--config=/home/roman/Odoo/config/odoo-local-16.conf",
+                "--database=16.0_training",
+                "--init=real_estate",
+                //"--update=hospital_management", 
+                //"--test-enable",
+                //"--stop-after-init"
+            ],
+            "console": "integratedTerminal",
+        },   
+        {
+            "name": "16.0 Stock Test",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/roman/Odoo/16.0/src/odoo/odoo-bin",
+            "args": [
+                "--config=/home/roman/Odoo/config/odoo-local-16.conf",
+                "--database=16.0_training",
+                //"--init=prt_product_tweaks_sku",
+                //"--update=prt_product_tweaks_sku", 
+                "--test-enable",
+                "--stop-after-init"
+            ],
+            "console": "integratedTerminal",
+        }
+    ]
+}

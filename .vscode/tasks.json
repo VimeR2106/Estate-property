@@ -1,0 +1,84 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      // Run Odoo with debuger
+      {
+        "type": "docker-run",
+        "label": "docker-run: odoo14",
+        "dockerRun": {
+          "containerName": "bootcamp-14",
+          "image": "odoo-debug: odoo",
+          "volumes": [
+            {
+              "containerPath": "/home/mike/odoo/14.0/bootcamp",
+              "localPath": "${env:HOME}/odoo/14.0"
+            }
+          ],
+          "ports": [
+            {
+              "containerPort": 8069,
+              "hostPort": 8069
+            },{
+              "containerPort": 5678,
+              "hostPort": 5678
+            },
+          ],
+          "customOptions": "--link pg_10:db"
+        },
+        "python": {
+          "args": [
+            "--config=/home/mike/odoo/bootcamp/odoo-docker-bootcamp.conf",
+            "--database=14_test_001",
+            //"--update=sale_order_line_number",
+          ],
+          "file": "/home/mike/odoo/14.0/odoo-bin"
+        },
+      },
+      // Run Odoo with tests enabled. Stop when tests are finished
+      {
+        "type": "docker-run",
+        "label": "docker-run: tower tests",
+        "dependsOn": ["docker-build"],
+        "dockerRun": {
+          "containerName": "tower-14",
+          "image": "odoo-debug:14.0-tower",
+          "volumes": [
+            {
+              "containerPath": "/home/mike/odoo",
+              "localPath": "${env:HOME}/odoo"
+            }
+          ],
+          "ports": [
+            {
+              "containerPort": 8069,
+              "hostPort": 8069
+            },{
+              "containerPort": 5678,
+              "hostPort": 5678
+            },
+          ],
+          "customOptions": "--link pg_10:db"
+        },
+        "python": {
+          "args": [
+            "--config=/home/mike/odoo/bootcamp/odoo-docker-bootcamp.conf",
+            "--database=14_cetmix_tower_test",
+            "--init=cetmix_tower_server",
+            "--test-enable",
+            "--stop-after-init",
+          ],
+          "file": "/home/mike/odoo/14.0/src/odoo/odoo-bin"
+        },
+      },
+      // This image will be built for tasks
+      {
+        "label": "docker-build",
+        "type": "docker-build",
+        "dockerBuild": {
+          "context": "${workspaceFolder}",
+          "dockerfile": "${workspaceFolder}/Dockerfile",
+          "tag": "odoo-debug:14.0-tower"
+        }
+      }
+    ]
+  }
